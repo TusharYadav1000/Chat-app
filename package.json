@@ -1,0 +1,24 @@
+{
+  "name": "chat-app",
+  "version": "1.0.0",
+  "description": "Chatting application ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon  src/index.js",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TusharYadav1000/Chat-app.git"
+  },
+  "author": "tushar yadav",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TusharYadav1000/Chat-app/issues"
+  },
+  "homepage": "https://github.com/TusharYadav1000/Chat-app#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
