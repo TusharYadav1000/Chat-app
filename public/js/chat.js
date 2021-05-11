@@ -14,6 +14,9 @@ const $messages = document.getElementById('messages')
 const messageTemplate = document.getElementById('message-template').innerHTML
 const locationMessageTemplate = document.getElementById('location-message-template').innerHTML
 
+//options
+const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
+
 socket.on('message', (message) => {
     console.log(message)
     const html = Mustache.render(messageTemplate, {
@@ -24,6 +27,9 @@ socket.on('message', (message) => {
 })
 
 
+/*========================================
+=            Location Message            =
+========================================*/
 socket.on('locationMessage', (message) => {
     console.log('This is the location', message.location)
     const html = Mustache.render(locationMessageTemplate, {
@@ -32,12 +38,18 @@ socket.on('locationMessage', (message) => {
     })
     $messages.insertAdjacentHTML('beforeend', html)
 })
+/*=====  End of Location Message  ======*/
 
+
+
+/**
+ *
+ * Enabling and disabling submit button
+ *
+ */
 
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
-
-
     $messageFormButton.setAttribute('disabled', 'disabled')
     const message = e.target.elements.message.value
     socket.emit('sendMessage', message, (err) => {
@@ -48,17 +60,20 @@ $messageForm.addEventListener('submit', (e) => {
             return console.error(err)
         }
         console.log('The message is delivered')
-
     })
 });
+
+
+
+/*=========================================
+=            Location Sharing             =
+=========================================*/
 
 document.getElementById('send-location').addEventListener('click', (e) => {
     if (!navigator.geolocation) {
         return alert('Geolocation is not supported by your browser')
     }
-
     $sendLocation.setAttribute('disabled', 'disabled')
-
     navigator.geolocation.getCurrentPosition((position) => {
         let data = {
             latitude: position.coords.latitude,
@@ -68,7 +83,15 @@ document.getElementById('send-location').addEventListener('click', (e) => {
             $sendLocation.removeAttribute('disabled')
             console.log('Location shared!')
         })
-
     })
-
 });
+
+/*=====  End of Location Sharing   ======*/
+
+
+
+
+
+/* Sending the username and room */
+
+socket.emit('join', { username, room })

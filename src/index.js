@@ -20,23 +20,33 @@ let count = 0;
 io.on('connection', (socket) => {
     console.log('New WebSocket connection')
 
-    socket.emit('message', generateMessage('Welcome!'))
-    socket.broadcast.emit('message', generateMessage('A new user has joined'))
+
+
+
+    /*Join*/
+    socket.on('join', ({ username, room }) => {
+        socket.join(room)
+        socket.emit('message', generateMessage('Welcome!'))
+        socket.broadcast.to(room).emit('message', generateMessage(` ${username} has joined`))
+    })
+
+    /* Sending the regular message */
     socket.on('sendMessage', (message, callback) => {
         const filter = new Filter()
         if (filter.isProfane(message)) {
             return callback("Profanity is not allowed")
         }
-        io.emit('message', generateMessage(message))
+        io.to('pubg').emit('message', generateMessage(message))
         callback()
     })
 
+    /* Sending the location */
     socket.on('sendLocation', (data, callback) => {
         io.emit('locationMessage', generateLocationMessage(`https://google.com/maps?q=${data.latitude},${data.longitude}`))
         callback()
     })
 
-
+    /* When user Disconnect */
     socket.on('disconnect', () => {
         io.emit('message', generateMessage('A user has left the chat'))
     })
