@@ -6,18 +6,31 @@ const $messageFormInput = $messageForm.querySelector('input')
 const $messageFormButton = $messageForm.querySelector('button')
 const $sendLocation = document.getElementById('send-location')
 const $messages = document.getElementById('messages')
+const $location = document.getElementById('location')
+
 
 
 //Templates
 const messageTemplate = document.getElementById('message-template').innerHTML
+const locationMessageTemplate = document.getElementById('location-message-template').innerHTML
 
 socket.on('message', (message) => {
     console.log(message)
     const html = Mustache.render(messageTemplate, {
         message
     })
-    $messages.insertAdjacentHTML('beforeend', html)
+    $location.insertAdjacentHTML('beforeend', html)
 })
+
+
+socket.on('locationMessage', (url) => {
+    console.log(url)
+    const html = Mustache.render(locationMessageTemplate, {
+        url
+    })
+    $location.insertAdjacentHTML('beforeend', html)
+})
+
 
 $messageForm.addEventListener('submit', (e) => {
     e.preventDefault();
