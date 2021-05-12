@@ -51,9 +51,9 @@ const getUser = (id) => {
 }
 
 
-/*Get the user in a roomm */
+/*Get the users in a roomm */
 
-const getUserInRoom = (room) => {
+const getUsersInRoom = (room) => {
     room = room.trim().toLowerCase();
     const user = users.filter((user) => user.room === room)
     return user
@@ -65,5 +65,5 @@ module.exports = {
     addUser,
     removeUser,
     getUser,
-    getUserInRoom
+    getUsersInRoom
 }
